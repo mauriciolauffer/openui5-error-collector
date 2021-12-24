@@ -1,0 +1,25 @@
+specVersion: '2.5'
+metadata:
+  name: ui5.template.boilerplate
+  copyright: |-
+    ui5.template.boilerplate v${version}
+     * @copyright Copyright ${currentYear} - Mauricio Lauffer
+type: application
+builder:
+  cachebuster:
+    signatureType: hash
+  resources:
+    excludes:
+    - "/localService/**"
+    - "/test/**"
+  customTasks:
+  - name: ui5-task-minifier
+    afterTask: uglify
+framework:
+  name: OpenUI5
+  version: 1.96.0
+  libraries:
+    - name: sap.ui.core
+    - name: themelib_sap_fiori_3
+    - name: sap.m
+      development: true

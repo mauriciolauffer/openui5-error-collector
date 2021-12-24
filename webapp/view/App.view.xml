@@ -1,0 +1,10 @@
+<mvc:View controllerName="ui5.template.boilerplate.controller.App" displayBlock="true"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  height="100%">
+  <App id="app" busy="{app>/views/app/busy}" busyIndicatorDelay="0">
+    <Page title="{i18n>appTitle}">
+      <Text text="TEST"/>
+    </Page>
+  </App>
+</mvc:View>

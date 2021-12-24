@@ -1,0 +1,3 @@
+root: true
+extends:
+  - eslint-config-mlauffer-ui5

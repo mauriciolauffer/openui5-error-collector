@@ -18,6 +18,6 @@
       "sinon"
     ]
   },
-  "include": ["webapp/**/*"],
-  "exclude": ["webapp/test/**/*", "node_modules"]
+  "include": ["test/webapp/**/*"],
+  "exclude": ["test/webapp/test/**/*", "node_modules"]
 }

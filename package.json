@@ -1,7 +1,7 @@
 {
-  "name": "ui5-template-boilerplate",
-  "version": "1.0.0",
-  "description": "UI5 template boilerplate",
+  "name": "openui5-error-collector",
+  "version": "0.0.0",
+  "description": "UI5 library to collect all javascript errors",
   "private": true,
   "author": "Mauricio Lauffer",
   "devDependencies": {
@@ -11,30 +11,26 @@
     "@types/qunit": "^2.11.2",
     "@types/sinon": "^10.0.4",
     "eslint": "^7.32.0",
-    "eslint-config-mlauffer-ui5": "^0.3.0",
+    "eslint-config-mlauffer-nodejs": "^1.2.1",
+    "eslint-config-mlauffer-ui5": "^0.3.1",
+    "eslint-plugin-jsdoc": "^37.6.3",
+    "eslint-plugin-sonarjs": "^0.11.0",
     "karma": "^6.3.4",
     "karma-ui5": "^2.3.4",
-    "openui5-smart-mockserver": "^0.3.1",
-    "ui5-task-minifier": "^1.0.2"
+    "openui5-smart-mockserver": "^0.3.1"
   },
   "scripts": {
     "start": "ui5 serve",
     "build": "ui5 build --clean-dest --include-task=generateCachebusterInfo",
     "test": "npm run lint",
-    "lint": "eslint webapp",
-    "lint:fix": "eslint webapp --fix"
-  },
-  "ui5": {
-    "dependencies": [
-      "ui5-task-minifier",
-      "openui5-smart-mockserver"
-    ]
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mauriciolauffer/ui5-template-boilerplate.git"
+    "url": "https://github.com/mauriciolauffer/openui5-error-collector.git"
   },
   "bugs": {
-    "url": "https://github.com/mauriciolauffer/ui5-template-boilerplate/issues"
+    "url": "https://github.com/mauriciolauffer/openui5-error-collector/issues"
   }
 }

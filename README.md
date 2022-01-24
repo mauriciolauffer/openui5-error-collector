@@ -1,1 +1,1 @@
-# ui5-template-boilerplate
+# openui5-error-collector

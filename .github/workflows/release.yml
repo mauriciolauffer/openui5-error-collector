@@ -10,7 +10,7 @@ jobs:
       - uses: GoogleCloudPlatform/release-please-action@v2
         with:
           release-type: node
-          package-name: ui5-template-boilerplate
+          package-name: openui5-error-collector
       - uses: actions/checkout@v2
         if: ${{ steps.release.outputs.release_created }}
       - uses: actions/setup-node@v2

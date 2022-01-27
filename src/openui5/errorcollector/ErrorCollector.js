@@ -7,12 +7,10 @@
    *
    */
   function checkUi5IsLoaded() {
-    console.log(88888);
     if (window.sap && window.sap.ui && window.sap.ui.require) {
       addUI5LogListener();
       clearInterval(intervalId);
     } else if (Date.now() - startTime > 60000) { // Await ui5 for 1 minute max
-      console.log(87878787);
       clearInterval(intervalId);
     }
   }

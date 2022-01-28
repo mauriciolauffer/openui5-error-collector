@@ -1,0 +1,6 @@
+/**
+ * openui5.errorcollector v0.0.0
+ *
+ * @copyright Copyright 2022 - Mauricio Lauffer
+ */
+"use strict";(function(){if(window.ui5ErrorCollector)return;function e(){if(window.sap&&window.sap.ui&&window.sap.ui.require){t();clearInterval(c)}else if(Date.now()-s>6e4){clearInterval(c)}}function t(){sap.ui.require(["sap/base/Log"],function(e){const t={onLogEntry:function(e){r.push(n(e))}};e.addLogListener(t)})}function n(e){const t=new Error(e.message);return{type:"ui5",timestamp:new Date(e.timestamp||Date.now()).toJSON(),uri:window.location.href,stack:t.stack,message:e.message,component:e.component,level:e.level}}function o(e){return{type:e.type,timestamp:(new Date).toJSON(),uri:e.target.location.href,stack:e.error.stack,message:e.message,elapsedTimestamp:e.timeStamp,filename:e.filename}}function i(e){return{type:e.type,timestamp:(new Date).toJSON(),uri:e.target.location.href,message:e.reason,elapsedTimestamp:e.timeStamp}}window.addEventListener("error",function(e){r.push(o(e))});window.addEventListener("unhandledrejection",function(e){r.push(i(e))});function a(){this._logEvents=r}const r=[];const s=Date.now();const c=setInterval(e,300);e();window.ui5ErrorCollector=new a})();

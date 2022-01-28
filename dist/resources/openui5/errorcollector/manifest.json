@@ -1,0 +1,26 @@
+{
+  "sap.app": {
+    "id": "openui5.errorcollector",
+    "type": "library",
+    "applicationVersion": {
+      "version": "0.0.0"
+    },
+    "title": "UI5 library to collect all javascript errors"
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "dependencies": {
+      "minUI5Version": "1.30.0",
+      "libs": {
+        "sap.ui.core": {}
+      }
+    }
+  }
+}

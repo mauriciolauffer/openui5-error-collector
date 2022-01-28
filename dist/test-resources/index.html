@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Mauricio Lauffer">
+  <title>openui5.errorcollector</title>
+</head>
+
+<body class="sapUiBody">
+  <script src="./ErrorCollector.js"></script>
+  <script>
+    'use strict';
+    const x1 = 1;
+    x1 = 2;
+  </script>
+  <script>
+    'use strict';
+    const x1 = 1;
+  </script>
+  <script>
+    'use strict';
+    let x2 = 1;
+    x2.repRace();
+  </script>
+  <script>
+    'use strict';
+    throw new Error('ai aia ia');
+  </script>
+  <script>
+    'use strict';
+    fetch('./xurupita.js');
+  </script>
+</body>
+
+</html>

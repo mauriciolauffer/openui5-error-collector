@@ -1,10 +1,14 @@
+/**
+ * ${copyright}
+ */
+
 'use strict';
 
 (function() {
   if (window.ui5ErrorCollector) return;
 
   /**
-   *
+   * Check whether UI5 library has been loaded
    */
   function checkUi5IsLoaded() {
     if (window.sap && window.sap.ui && window.sap.ui.require) {
@@ -16,13 +20,13 @@
   }
 
   /**
-   *
+   * Add custom UI5 log listener to capture all ui5 log events
    */
   function addUI5LogListener() {
     sap.ui.require(['sap/base/Log'], function(Log) {
       const customLogListener = {
         onLogEntry: function(evt) {
-          logEvents.push(captureUi5LogEntry(evt));
+          logEvents.push(mapUi5LogEntry(evt));
         }
       };
       Log.addLogListener(customLogListener);
@@ -30,9 +34,12 @@
   }
 
   /**
-   * @param evt
+   * Map UI5 log events
+   *
+   * @param {object} evt UI5 log event
+   * @returns {object} Mapped error, type = 'ui5'
    */
-  function captureUi5LogEntry(evt) {
+  function mapUi5LogEntry(evt) {
     const err = new Error(evt.message);
     return {
       type: 'ui5',
@@ -46,9 +53,12 @@
   }
 
   /**
-   * @param evt
+   * Map js error events
+   *
+   * @param {ErrorEvent} evt Error event
+   * @returns {object} Mapped error, type = 'error'
    */
-  function captureJsLogEntry(evt) {
+  function mapJsLogEntry(evt) {
     return {
       type: evt.type,
       timestamp: new Date().toJSON(),
@@ -61,9 +71,12 @@
   }
 
   /**
-   * @param evt
+   * Map Promise unhandledrejection events
+   *
+   * @param {PromiseRejectionEvent} evt Error event
+   * @returns {object} Mapped error, type = 'unhandledrejection'
    */
-  function capturePromiseLogEntry(evt) {
+  function mapPromiseLogEntry(evt) {
     return {
       type: evt.type,
       timestamp: new Date().toJSON(),
@@ -73,12 +86,18 @@
     };
   }
 
+  /**
+   * Capture all js errors
+   */
   window.addEventListener('error', function(evt) {
-    logEvents.push(captureJsLogEntry(evt));
+    logEvents.push(mapJsLogEntry(evt));
   });
 
+  /**
+   * Capture Promise unhandled rejections
+   */
   window.addEventListener('unhandledrejection', function(evt) {
-    logEvents.push(capturePromiseLogEntry(evt));
+    logEvents.push(mapPromiseLogEntry(evt));
   });
 
 

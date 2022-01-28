@@ -2,22 +2,27 @@
   "name": "openui5-error-collector",
   "version": "0.0.0",
   "description": "UI5 library to collect all javascript errors",
-  "private": true,
+  "private": false,
   "author": "Mauricio Lauffer",
+  "main": "dist/resources/openui5/errorcollector/ErrorCollector.js",
+  "files": [
+    "dist",
+    "src",
+    "ui5.yaml"
+  ],
   "devDependencies": {
-    "@openui5/ts-types": "^1.90.7",
+    "@openui5/ts-types": "^1.98.0",
     "@types/jasmine": "^3.10.0",
-    "@types/node": "^16.11.1",
+    "@types/node": "^16.11.21",
     "@types/qunit": "^2.11.2",
-    "@types/sinon": "^10.0.4",
+    "@types/sinon": "^10.0.9",
     "eslint": "^7.32.0",
     "eslint-config-mlauffer-nodejs": "^1.2.1",
     "eslint-config-mlauffer-ui5": "^0.3.1",
-    "eslint-plugin-jsdoc": "^37.6.3",
+    "eslint-plugin-jsdoc": "^37.7.0",
     "eslint-plugin-sonarjs": "^0.11.0",
-    "karma": "^6.3.4",
-    "karma-ui5": "^2.3.4",
-    "openui5-smart-mockserver": "^0.3.1"
+    "karma": "^6.3.12",
+    "karma-ui5": "^2.3.4"
   },
   "scripts": {
     "start": "ui5 serve",

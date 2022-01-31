@@ -1,6 +1,6 @@
 {
   "name": "openui5-error-collector",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "UI5 library to collect all javascript errors",
   "private": false,
   "author": "Mauricio Lauffer",

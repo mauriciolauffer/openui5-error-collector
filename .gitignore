@@ -1,6 +1,5 @@
 .vscode/
 .idea/
-dist/
 build/
 coverage/
 data/logs/

@@ -12,12 +12,9 @@
     "outDir": "types",
     "types": [
       "@openui5/ts-types",
-      "jasmine",
-      "node",
-      "qunit",
-      "sinon"
+      "node"
     ]
   },
-  "include": ["test/webapp/**/*"],
-  "exclude": ["test/webapp/test/**/*", "node_modules"]
+  "include": ["src/**/*"],
+  "exclude": ["test/**/*", "node_modules"]
 }

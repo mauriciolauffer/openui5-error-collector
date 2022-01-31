@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Mauricio Lauffer">
+  <title>openui5.errorcollector</title>
+</head>
+
+<body>
+  <pre><code id="captureErrors"></code></pre>
+  <script src="../dist/ui5ErrorCollector.min.js"></script>
+  <script>
+    'use strict';
+    fetch('./notFoundNoCatch.js')
+      .then((res) => {
+        throw new Error('no Promise catch...');
+      });
+  </script>
+  <script>
+    'use strict';
+    const x1 = 1;
+    x1 = 2;
+  </script>
+  <script>
+    'use strict';
+    const x1 = 1;
+  </script>
+  <script>
+    'use strict';
+    let x2 = 1;
+    x2.repRace();
+  </script>
+  <script>
+    'use strict';
+    throw new Error('ai aia ia');
+  </script>
+  <script>
+    'use strict';
+    setTimeout(() => {
+      document.getElementById('captureErrors').textContent = JSON.stringify(window.ui5ErrorCollector, null, 4);
+    }, 200);
+  </script>
+</body>
+
+</html>

@@ -1,7 +1,3 @@
-/**
- * ${copyright}
- */
-
 'use strict';
 
 (function() {

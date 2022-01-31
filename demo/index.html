@@ -8,8 +8,16 @@
   <title>openui5.errorcollector</title>
 </head>
 
-<body class="sapUiBody">
-  <script src="./ErrorCollector.js"></script>
+<body>
+  <pre><code id="captureErrors"></code></pre>
+  <script src="../dist/ui5ErrorCollector.min.js"></script>
+  <script>
+    'use strict';
+    fetch('./notFoundNoCatch.js')
+      .then((res) => {
+        throw new Error('no Promise catch...');
+      });
+  </script>
   <script>
     'use strict';
     const x1 = 1;
@@ -30,7 +38,9 @@
   </script>
   <script>
     'use strict';
-    fetch('./xurupita.js');
+    setTimeout(() => {
+      document.getElementById('captureErrors').textContent = JSON.stringify(window.ui5ErrorCollector, null, 4);
+    }, 200);
   </script>
 </body>
 

@@ -32,12 +32,12 @@
   /**
    * Map UI5 log events
    *
-   * @param {object} evt UI5 log event
-   * @returns {object} Mapped error, type = 'ui5'
+   * @param {object} evt - UI5 log event
+   * @returns {UI5ErrorLogEvent} Mapped error, type = 'ui5'
    */
   function mapUi5LogEntry(evt) {
     const err = new Error(evt.message);
-    return {
+    return Object.assign(LOG_TEMPLATE, {
       type: 'ui5',
       timestamp: new Date(evt.timestamp || Date.now()).toJSON(),
       uri: window.location.href,
@@ -45,47 +45,49 @@
       message: evt.message,
       component: evt.component,
       level: evt.level
-    };
+    });
   }
 
   /**
    * Map js error events
    *
-   * @param {ErrorEvent} evt Error event
-   * @returns {object} Mapped error, type = 'error'
+   * @param {ErrorEvent} evt - Error event
+   * @returns {UI5ErrorLogEvent} Mapped error, type = 'error'
    */
   function mapJsLogEntry(evt) {
-    return {
+    return Object.assign({}, LOG_TEMPLATE, {
       type: evt.type,
       timestamp: new Date().toJSON(),
       uri: evt.target.location.href,
       stack: evt.error.stack,
       message: evt.message,
       elapsedTimestamp: evt.timeStamp,
-      filename: evt.filename
-    };
+      filename: evt.filename,
+      level: 1
+    });
   }
 
   /**
    * Map Promise unhandledrejection events
    *
-   * @param {PromiseRejectionEvent} evt Error event
-   * @returns {object} Mapped error, type = 'unhandledrejection'
+   * @param {PromiseRejectionEvent} evt - Error event
+   * @returns {UI5ErrorLogEvent} Mapped error, type = 'unhandledrejection'
    */
   function mapPromiseLogEntry(evt) {
-    return {
+    return Object.assign({}, LOG_TEMPLATE, {
       type: evt.type,
       timestamp: new Date().toJSON(),
       uri: evt.target.location.href,
       message: evt.reason,
-      elapsedTimestamp: evt.timeStamp
-    };
+      elapsedTimestamp: evt.timeStamp,
+      level: 1
+    });
   }
 
   /**
    * Get all log entries to be synced
    *
-   * @returns {object[]} Log entries
+   * @returns {UI5ErrorLogEvent[]} Log entries
    */
   function getLogsToSync() {
     return logEvents.filter(function(log) {
@@ -125,9 +127,9 @@
   /**
    * Set configuration
    *
-   * @param {object} opt errors
-   * @param {boolean} opt.hasSyncOnExit Sync on exit
-   * @param {string} opt.serverUrl Server URL
+   * @param {object} opt - Config options
+   * @param {boolean} opt.hasSyncOnExit - Sync on exit
+   * @param {string} opt.serverUrl - Server URL
    */
   function setConfiguration(opt) {
     const params = opt || {};
@@ -138,20 +140,48 @@
   /**
    * Get all captured errors
    *
-   * @returns {object[]} Captured errors
+   * @returns {UI5ErrorLogEvent[]} Captured errors
    */
   function getErrors() {
     return logEvents;
   }
 
   /**
-   * @type {object[]}
+   * @typedef UI5ErrorLogEvent
+   * @type {object}
+   * @property {string} type - Log event type
+   * @property {string} timestamp - When event was logged
+   * @property {string} uri - Where event was logged
+   * @property {string} stack - Error stack
+   * @property {string} message - Error message
+   * @property {string} component - UI5 Log component
+   * @property {number} level - Log level
+   * @property {number} elapsedTimestamp - Elapsed time since page load
+   * @property {string} filename - File which triggered the error
+   */
+
+  /**
+   * @type {UI5ErrorLogEvent[]}
    */
   const logEvents = [];
   const CONFIG = {
     hasSyncOnExit: false,
     lastSync: 0,
     serverUrl: ''
+  };
+  /**
+   * @type {UI5ErrorLogEvent}
+   */
+  const LOG_TEMPLATE = {
+    type: '',
+    timestamp: '',
+    uri: '',
+    stack: '',
+    message: '',
+    component: '',
+    level: 0,
+    elapsedTimestamp: 0,
+    filename: ''
   };
   const START_TIME = Date.now();
   const CHECK_UI5_INTERVAL_ID = setInterval(checkUi5IsLoaded, 300);

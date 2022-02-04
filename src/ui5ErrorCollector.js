@@ -7,37 +7,37 @@
    * Check whether UI5 library has been loaded
    */
   function checkUi5IsLoaded() {
-    if (window.sap && window.sap.ui && window.sap.ui.require) {
-      addUI5LogListener();
-      clearInterval(intervalId);
-    } else if (Date.now() - startTime > 60000) { // Await ui5 for 1 minute max
-      clearInterval(intervalId);
+    if (window.sap && sap.ui && sap.ui.require) {
+      sap.ui.require(['sap/base/Log'], addUI5LogListener);
+      clearInterval(CHECK_UI5_INTERVAL_ID);
+    } else if (Date.now() - START_TIME > 60000) { // Await UI5 for 1 minute max
+      clearInterval(CHECK_UI5_INTERVAL_ID);
     }
   }
 
   /**
-   * Add custom UI5 log listener to capture all ui5 log events
+   * Add custom UI5 log listener to capture all UI5 log events
+   *
+   * @param {module:sap/base/Log} Log UI5 Log module
    */
-  function addUI5LogListener() {
-    sap.ui.require(['sap/base/Log'], function(Log) {
-      const customLogListener = {
-        onLogEntry: function(evt) {
-          logEvents.push(mapUi5LogEntry(evt));
-        }
-      };
-      Log.addLogListener(customLogListener);
-    });
+  function addUI5LogListener(Log) {
+    const customLogListener = {
+      onLogEntry: function logUi5LogEntry(evt) {
+        logEvents.push(mapUi5LogEntry(evt));
+      }
+    };
+    Log.addLogListener(customLogListener);
   }
 
   /**
    * Map UI5 log events
    *
-   * @param {object} evt UI5 log event
-   * @returns {object} Mapped error, type = 'ui5'
+   * @param {object} evt - UI5 log event
+   * @returns {UI5ErrorLogEvent} Mapped error, type = 'ui5'
    */
   function mapUi5LogEntry(evt) {
     const err = new Error(evt.message);
-    return {
+    return Object.assign(LOG_TEMPLATE, {
       type: 'ui5',
       timestamp: new Date(evt.timestamp || Date.now()).toJSON(),
       uri: window.location.href,
@@ -45,79 +45,168 @@
       message: evt.message,
       component: evt.component,
       level: evt.level
-    };
+    });
   }
 
   /**
    * Map js error events
    *
-   * @param {ErrorEvent} evt Error event
-   * @returns {object} Mapped error, type = 'error'
+   * @param {ErrorEvent} evt - Error event
+   * @returns {UI5ErrorLogEvent} Mapped error, type = 'error'
    */
   function mapJsLogEntry(evt) {
-    return {
+    return Object.assign({}, LOG_TEMPLATE, {
       type: evt.type,
       timestamp: new Date().toJSON(),
       uri: evt.target.location.href,
       stack: evt.error.stack,
       message: evt.message,
       elapsedTimestamp: evt.timeStamp,
-      filename: evt.filename
-    };
+      filename: evt.filename,
+      level: 1
+    });
   }
 
   /**
    * Map Promise unhandledrejection events
    *
-   * @param {PromiseRejectionEvent} evt Error event
-   * @returns {object} Mapped error, type = 'unhandledrejection'
+   * @param {PromiseRejectionEvent} evt - Error event
+   * @returns {UI5ErrorLogEvent} Mapped error, type = 'unhandledrejection'
    */
   function mapPromiseLogEntry(evt) {
-    return {
+    return Object.assign({}, LOG_TEMPLATE, {
       type: evt.type,
       timestamp: new Date().toJSON(),
       uri: evt.target.location.href,
       message: evt.reason,
-      elapsedTimestamp: evt.timeStamp
-    };
+      elapsedTimestamp: evt.timeStamp,
+      level: 1
+    });
   }
 
   /**
-   * Capture all js errors
+   * Get all log entries to be synced
+   *
+   * @returns {UI5ErrorLogEvent[]} Log entries
    */
-  window.addEventListener('error', function(evt) {
+  function getLogsToSync() {
+    return logEvents.filter(function(log) {
+      return new Date(log.timestamp) > new Date(CONFIG.lastSync);
+    });
+  }
+
+  /**
+   * Send errors to the server
+   *
+   */
+  function sendLogsToServer() {
+    if (!CONFIG.hasSyncOnExit) {
+      return;
+    }
+    const logsToSync = getLogsToSync();
+    if (logsToSync.length === 0) {
+      return;
+    }
+    const payload = JSON.stringify(logsToSync);
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon(CONFIG.serverUrl, payload);
+      CONFIG.lastSync = Date.now();
+      return;
+    }
+    fetch(CONFIG.serverUrl, {
+      body: payload,
+      method: 'POST'
+    })
+        .then(function(res) {
+          if (res.ok) {
+            CONFIG.lastSync = Date.now();
+          }
+        });
+  }
+
+  /**
+   * Set configuration
+   *
+   * @param {object} opt - Config options
+   * @param {boolean} opt.hasSyncOnExit - Sync on exit
+   * @param {string} opt.serverUrl - Server URL
+   */
+  function setConfiguration(opt) {
+    const params = opt || {};
+    CONFIG.hasSyncOnExit = params.hasSyncOnExit;
+    CONFIG.serverUrl = params.serverUrl;
+  }
+
+  /**
+   * Get all captured errors
+   *
+   * @returns {UI5ErrorLogEvent[]} Captured errors
+   */
+  function getErrors() {
+    return logEvents;
+  }
+
+  /**
+   * @typedef UI5ErrorLogEvent
+   * @type {object}
+   * @property {string} type - Log event type
+   * @property {string} timestamp - When event was logged
+   * @property {string} uri - Where event was logged
+   * @property {string} stack - Error stack
+   * @property {string} message - Error message
+   * @property {string} component - UI5 Log component
+   * @property {number} level - Log level
+   * @property {number} elapsedTimestamp - Elapsed time since page load
+   * @property {string} filename - File which triggered the error
+   */
+
+  /**
+   * @type {UI5ErrorLogEvent[]}
+   */
+  const logEvents = [];
+  const CONFIG = {
+    hasSyncOnExit: false,
+    lastSync: 0,
+    serverUrl: ''
+  };
+  /**
+   * @type {UI5ErrorLogEvent}
+   */
+  const LOG_TEMPLATE = {
+    type: '',
+    timestamp: '',
+    uri: '',
+    stack: '',
+    message: '',
+    component: '',
+    level: 0,
+    elapsedTimestamp: 0,
+    filename: ''
+  };
+  const START_TIME = Date.now();
+  const CHECK_UI5_INTERVAL_ID = setInterval(checkUi5IsLoaded, 300);
+  checkUi5IsLoaded();
+
+  window.addEventListener('error', function logError(evt) {
     logEvents.push(mapJsLogEntry(evt));
   });
 
-  /**
-   * Capture Promise unhandled rejections
-   */
-  window.addEventListener('unhandledrejection', function(evt) {
+  window.addEventListener('unhandledrejection', function logUnhandledRejection(evt) {
     logEvents.push(mapPromiseLogEntry(evt));
   });
 
+  window.addEventListener('beforeunload', function onBeforeUnload() {
+    sendLogsToServer();
+  });
 
-  /**
-   *
-   */
-  function ErrorCollector() {
-    this._logEvents = logEvents;
-    /* this._syncInterval = null;
-    this._hasSyncOnUnload = true;
-    this._isSyncOn = true;
-    this._lastSync = null;
-    this._serverUrl = true;
-    navigator.userAgent;
-    navigator.language; */
-  }
+  document.addEventListener('visibilitychange', function onVisibilityChange() {
+    if (document.visibilityState === 'hidden') {
+      sendLogsToServer();
+    }
+  });
 
-  /* ErrorCollector.prototype.config = function({syncInterval, syncOnUnload, serverUrl}) {
-    console.dir(arguments);
-  }; */
-
-  const logEvents = [];
-  const startTime = Date.now();
-  const intervalId = setInterval(checkUi5IsLoaded, 300);
-  checkUi5IsLoaded();
-  window.ui5ErrorCollector = new ErrorCollector();
+  window.ui5ErrorCollector = {
+    getErrors: getErrors,
+    setConfiguration: setConfiguration
+  };
 }());

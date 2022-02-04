@@ -7,26 +7,26 @@
    * Check whether UI5 library has been loaded
    */
   function checkUi5IsLoaded() {
-    if (window.sap && window.sap.ui && window.sap.ui.require) {
-      addUI5LogListener();
-      clearInterval(intervalId);
-    } else if (Date.now() - startTime > 60000) { // Await ui5 for 1 minute max
-      clearInterval(intervalId);
+    if (window.sap && sap.ui && sap.ui.require) {
+      sap.ui.require(['sap/base/Log'], addUI5LogListener);
+      clearInterval(CHECK_UI5_INTERVAL_ID);
+    } else if (Date.now() - START_TIME > 60000) { // Await UI5 for 1 minute max
+      clearInterval(CHECK_UI5_INTERVAL_ID);
     }
   }
 
   /**
-   * Add custom UI5 log listener to capture all ui5 log events
+   * Add custom UI5 log listener to capture all UI5 log events
+   *
+   * @param {module:sap/base/Log} Log UI5 Log module
    */
-  function addUI5LogListener() {
-    sap.ui.require(['sap/base/Log'], function(Log) {
-      const customLogListener = {
-        onLogEntry: function(evt) {
-          logEvents.push(mapUi5LogEntry(evt));
-        }
-      };
-      Log.addLogListener(customLogListener);
-    });
+  function addUI5LogListener(Log) {
+    const customLogListener = {
+      onLogEntry: function logUi5LogEntry(evt) {
+        logEvents.push(mapUi5LogEntry(evt));
+      }
+    };
+    Log.addLogListener(customLogListener);
   }
 
   /**
@@ -83,41 +83,100 @@
   }
 
   /**
-   * Capture all js errors
+   * Get all log entries to be synced
+   *
+   * @returns {object[]} Log entries
    */
-  window.addEventListener('error', function(evt) {
+  function getLogsToSync() {
+    return logEvents.filter(function(log) {
+      return new Date(log.timestamp) > new Date(CONFIG.lastSync);
+    });
+  }
+
+  /**
+   * Send errors to the server
+   *
+   */
+  function sendLogsToServer() {
+    if (!CONFIG.hasSyncOnExit) {
+      return;
+    }
+    const logsToSync = getLogsToSync();
+    if (logsToSync.length === 0) {
+      return;
+    }
+    const payload = JSON.stringify(logsToSync);
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon(CONFIG.serverUrl, payload);
+      CONFIG.lastSync = Date.now();
+      return;
+    }
+    fetch(CONFIG.serverUrl, {
+      body: payload,
+      method: 'POST'
+    })
+        .then(function(res) {
+          if (res.ok) {
+            CONFIG.lastSync = Date.now();
+          }
+        });
+  }
+
+  /**
+   * Set configuration
+   *
+   * @param {object} opt errors
+   * @param {boolean} opt.hasSyncOnExit Sync on exit
+   * @param {string} opt.serverUrl Server URL
+   */
+  function setConfiguration(opt) {
+    const params = opt || {};
+    CONFIG.hasSyncOnExit = params.hasSyncOnExit;
+    CONFIG.serverUrl = params.serverUrl;
+  }
+
+  /**
+   * Get all captured errors
+   *
+   * @returns {object[]} Captured errors
+   */
+  function getErrors() {
+    return logEvents;
+  }
+
+  /**
+   * @type {object[]}
+   */
+  const logEvents = [];
+  const CONFIG = {
+    hasSyncOnExit: false,
+    lastSync: 0,
+    serverUrl: ''
+  };
+  const START_TIME = Date.now();
+  const CHECK_UI5_INTERVAL_ID = setInterval(checkUi5IsLoaded, 300);
+  checkUi5IsLoaded();
+
+  window.addEventListener('error', function logError(evt) {
     logEvents.push(mapJsLogEntry(evt));
   });
 
-  /**
-   * Capture Promise unhandled rejections
-   */
-  window.addEventListener('unhandledrejection', function(evt) {
+  window.addEventListener('unhandledrejection', function logUnhandledRejection(evt) {
     logEvents.push(mapPromiseLogEntry(evt));
   });
 
+  window.addEventListener('beforeunload', function onBeforeUnload() {
+    sendLogsToServer();
+  });
 
-  /**
-   *
-   */
-  function ErrorCollector() {
-    this._logEvents = logEvents;
-    /* this._syncInterval = null;
-    this._hasSyncOnUnload = true;
-    this._isSyncOn = true;
-    this._lastSync = null;
-    this._serverUrl = true;
-    navigator.userAgent;
-    navigator.language; */
-  }
+  document.addEventListener('visibilitychange', function onVisibilityChange() {
+    if (document.visibilityState === 'hidden') {
+      sendLogsToServer();
+    }
+  });
 
-  /* ErrorCollector.prototype.config = function({syncInterval, syncOnUnload, serverUrl}) {
-    console.dir(arguments);
-  }; */
-
-  const logEvents = [];
-  const startTime = Date.now();
-  const intervalId = setInterval(checkUi5IsLoaded, 300);
-  checkUi5IsLoaded();
-  window.ui5ErrorCollector = new ErrorCollector();
+  window.ui5ErrorCollector = {
+    getErrors: getErrors,
+    setConfiguration: setConfiguration
+  };
 }());

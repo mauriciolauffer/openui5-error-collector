@@ -7,7 +7,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: GoogleCloudPlatform/release-please-action@v2
+      - uses: GoogleCloudPlatform/release-please-action@v3
         with:
           release-type: node
           package-name: openui5-error-collector
@@ -19,7 +19,7 @@ jobs:
           cache: npm
           registry-url: 'https://registry.npmjs.org'
         if: ${{ steps.release.outputs.release_created }}
-      - run: npm ci
+      - run: npm ci --ignore-scripts
         if: ${{ steps.release.outputs.release_created }}
       - run: npm publish
         env:

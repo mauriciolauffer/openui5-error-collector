@@ -108,20 +108,8 @@
       return;
     }
     const payload = JSON.stringify(logsToSync);
-    if (navigator.sendBeacon) {
-      navigator.sendBeacon(CONFIG.serverUrl, payload);
-      CONFIG.lastSync = Date.now();
-      return;
-    }
-    fetch(CONFIG.serverUrl, {
-      body: payload,
-      method: 'POST'
-    })
-        .then(function(res) {
-          if (res.ok) {
-            CONFIG.lastSync = Date.now();
-          }
-        });
+    navigator.sendBeacon(CONFIG.serverUrl, payload);
+    CONFIG.lastSync = Date.now();
   }
 
   /**

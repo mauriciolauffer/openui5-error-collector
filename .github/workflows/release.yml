@@ -3,9 +3,13 @@ on:
   push:
     branches: [master, main]
 
+permissions: read-all
+
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+     pull-requests: write
     steps:
       - uses: GoogleCloudPlatform/release-please-action@v3
         with:

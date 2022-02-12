@@ -11,10 +11,10 @@
   "devDependencies": {
     "@microsoft/eslint-formatter-sarif": "^2.1.5",
     "@openui5/ts-types": "^1.98.0",
-    "@types/node": "^16.11.22",
-    "eslint": "^7.32.0",
+    "@types/node": "^16.11.24",
+    "eslint": "^8.9.0",
     "eslint-config-mlauffer-ui5": "^0.3.1",
-    "vite": "^2.7.13"
+    "vite": "^2.8.1"
   },
   "scripts": {
     "dev": "vite",

@@ -30,3 +30,8 @@ preview.json
 cp.project.properties.json
 /target
 .DS_Store
+.classpath
+.settings
+.project
+.externalToolBuilders
+tmp/

@@ -37,7 +37,7 @@
    */
   function mapUi5LogEntry(evt) {
     const err = new Error(evt.message);
-    return Object.assign(LOG_TEMPLATE, {
+    return Object.assign({}, LOG_TEMPLATE, {
       type: 'ui5',
       timestamp: new Date(evt.timestamp || Date.now()).toJSON(),
       uri: window.location.href,
@@ -81,6 +81,25 @@
       message: evt.reason,
       elapsedTimestamp: evt.timeStamp,
       level: 1
+    });
+  }
+
+  /**
+   * Map Report API error events
+   *
+   * @param {Report} evt - Report API event
+   * @returns {UI5ErrorLogEvent} Mapped error, type = [deprecation, intervention, crash]
+   */
+  function mapReportApiLogEntry(evt) {
+    const body = evt.body || {};
+    return Object.assign({}, LOG_TEMPLATE, {
+      type: evt.type,
+      timestamp: new Date().toJSON(),
+      uri: evt.url,
+      message: body.message || body.reason,
+      component: body.id,
+      level: 1,
+      filename: body.sourceFile
     });
   }
 
@@ -135,17 +154,37 @@
   }
 
   /**
+   * Set ReportingObserver to collect and access reports from Reporting API
+   *
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Reporting_API}
+   */
+  function setReportingObserver() {
+    if (window.ReportingObserver) {
+      const options = {
+        types: ['deprecation', 'intervation', 'crash'],
+        buffered: true
+      };
+      const observer = new ReportingObserver(function(reports) {
+        reports.forEach(function(report) {
+          logEvents.push(mapReportApiLogEntry(report));
+        });
+      }, options);
+      observer.observe();
+    }
+  }
+
+  /**
    * @typedef UI5ErrorLogEvent
    * @type {object}
    * @property {string} type - Log event type
    * @property {string} timestamp - When event was logged
    * @property {string} uri - Where event was logged
-   * @property {string} stack - Error stack
+   * @property {?string} stack - Error stack
    * @property {string} message - Error message
-   * @property {string} component - UI5 Log component
+   * @property {?string} component - UI5 Log component
    * @property {number} level - Log level
-   * @property {number} elapsedTimestamp - Elapsed time since page load
-   * @property {string} filename - File which triggered the error
+   * @property {?number} elapsedTimestamp - Elapsed time since page load
+   * @property {?string} filename - File which triggered the error
    */
 
   /**
@@ -164,29 +203,27 @@
     type: '',
     timestamp: '',
     uri: '',
-    stack: '',
+    stack: null,
     message: '',
-    component: '',
+    component: null,
     level: 0,
-    elapsedTimestamp: 0,
-    filename: ''
+    elapsedTimestamp: null,
+    filename: null
   };
   const START_TIME = Date.now();
   const CHECK_UI5_INTERVAL_ID = setInterval(checkUi5IsLoaded, 300);
   checkUi5IsLoaded();
+  setReportingObserver();
 
   window.addEventListener('error', function logError(evt) {
     logEvents.push(mapJsLogEntry(evt));
   });
-
   window.addEventListener('unhandledrejection', function logUnhandledRejection(evt) {
     logEvents.push(mapPromiseLogEntry(evt));
   });
-
   window.addEventListener('beforeunload', function onBeforeUnload() {
     sendLogsToServer();
   });
-
   document.addEventListener('visibilitychange', function onVisibilityChange() {
     if (document.visibilityState === 'hidden') {
       sendLogsToServer();

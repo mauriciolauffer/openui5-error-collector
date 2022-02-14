@@ -1,3 +1,7 @@
 root: true
 extends:
   - eslint-config-mlauffer-ui5
+globals:
+  ReportingObserver: true
+rules:
+  "sonarjs/cognitive-complexity": ["error", 20]

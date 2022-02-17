@@ -4,6 +4,45 @@
   if (window.ui5ErrorCollector) return;
 
   /**
+   * @typedef UI5ErrorLogEvent
+   * @type {object}
+   * @property {string} type - Log event type
+   * @property {string} timestamp - When event was logged
+   * @property {string} uri - Where event was logged
+   * @property {?string} stack - Error stack
+   * @property {string} message - Error message
+   * @property {?string} component - UI5 Log component
+   * @property {number} level - Log level
+   * @property {?number} elapsedTimestamp - Elapsed time since page load
+   * @property {?string} filename - File which triggered the error
+   */
+
+  /**
+   * @typedef UI5ErrorUi5BaseLogEntry
+   * @type {object}
+   * @property {number} timestamp - When event was logged
+   * @property {string} message - Error message
+   * @property {?string} component - UI5 Log component
+   * @property {number} level - Log level
+   */
+
+  /**
+   * @typedef UI5ErrorConfiguration
+   * @type {object}
+   * @property {number} lastSync - Last time sync has occured
+   * @property {string} serverUrl - Server URL
+   * @property {?UI5ErroronSyncHookCallback} onSyncHook - On sync hook
+   */
+
+  /**
+   * Callback provided to replace default sync with backend server
+   *
+   * @callback UI5ErroronSyncHookCallback
+   * @param {string} serverUrl - Server URL
+   * @param {UI5ErrorLogEvent[]} errors - List of captured errors
+   */
+
+  /**
    * Check whether UI5 library has been loaded
    */
   function checkUi5IsLoaded() {
@@ -22,6 +61,11 @@
    */
   function addUI5LogListener(Log) {
     const customLogListener = {
+    /**
+     * Handler for sap/base/Log onLogEntry
+     *
+     * @param {UI5ErrorUi5BaseLogEntry} evt - UI5 log event
+     */
       onLogEntry: function logUi5LogEntry(evt) {
         logEvents.push(mapUi5LogEntry(evt));
       }
@@ -32,7 +76,7 @@
   /**
    * Map UI5 log events
    *
-   * @param {object} evt - UI5 log event
+   * @param {UI5ErrorUi5BaseLogEntry} evt - UI5 log event
    * @returns {UI5ErrorLogEvent} Mapped error, type = 'ui5'
    */
   function mapUi5LogEntry(evt) {
@@ -58,7 +102,7 @@
     return Object.assign({}, LOG_TEMPLATE, {
       type: evt.type,
       timestamp: new Date().toJSON(),
-      uri: evt.target.location.href,
+      uri: window.location.href,
       stack: evt.error.stack,
       message: evt.message,
       elapsedTimestamp: evt.timeStamp,
@@ -77,7 +121,7 @@
     return Object.assign({}, LOG_TEMPLATE, {
       type: evt.type,
       timestamp: new Date().toJSON(),
-      uri: evt.target.location.href,
+      uri: window.location.href,
       message: evt.reason,
       elapsedTimestamp: evt.timeStamp,
       level: 1
@@ -119,29 +163,32 @@
    *
    */
   function sendLogsToServer() {
-    if (!CONFIG.hasSyncOnExit) {
-      return;
-    }
     const logsToSync = getLogsToSync();
-    if (logsToSync.length === 0) {
+    if (!CONFIG.serverUrl || logsToSync.length === 0) {
       return;
     }
     const payload = JSON.stringify(logsToSync);
-    navigator.sendBeacon(CONFIG.serverUrl, payload);
-    CONFIG.lastSync = Date.now();
+    if (CONFIG.onSyncHook) {
+      CONFIG.onSyncHook(CONFIG.serverUrl, logEvents);
+    } else {
+      navigator.sendBeacon(CONFIG.serverUrl, payload);
+      CONFIG.lastSync = Date.now();
+    }
   }
 
   /**
    * Set configuration
    *
    * @param {object} opt - Config options
-   * @param {boolean} opt.hasSyncOnExit - Sync on exit
    * @param {string} opt.serverUrl - Server URL
+   * @param {?UI5ErroronSyncHookCallback} opt.onSyncHook - On sync hook callback
    */
   function setConfiguration(opt) {
     const params = opt || {};
-    CONFIG.hasSyncOnExit = params.hasSyncOnExit;
     CONFIG.serverUrl = params.serverUrl;
+    if (typeof params.onSyncHook === 'function') {
+      CONFIG.onSyncHook = params.onSyncHook;
+    }
   }
 
   /**
@@ -174,27 +221,16 @@
   }
 
   /**
-   * @typedef UI5ErrorLogEvent
-   * @type {object}
-   * @property {string} type - Log event type
-   * @property {string} timestamp - When event was logged
-   * @property {string} uri - Where event was logged
-   * @property {?string} stack - Error stack
-   * @property {string} message - Error message
-   * @property {?string} component - UI5 Log component
-   * @property {number} level - Log level
-   * @property {?number} elapsedTimestamp - Elapsed time since page load
-   * @property {?string} filename - File which triggered the error
-   */
-
-  /**
    * @type {UI5ErrorLogEvent[]}
    */
   const logEvents = [];
+  /**
+   * @type {UI5ErrorConfiguration}
+   */
   const CONFIG = {
-    hasSyncOnExit: false,
     lastSync: 0,
-    serverUrl: ''
+    serverUrl: '',
+    onSyncHook: null
   };
   /**
    * @type {UI5ErrorLogEvent}

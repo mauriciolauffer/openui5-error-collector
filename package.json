@@ -2,8 +2,18 @@
   "name": "openui5-error-collector",
   "version": "0.0.2",
   "description": "UI5 library to collect all javascript errors",
-  "private": false,
   "author": "Mauricio Lauffer",
+  "license": "MIT",
+  "keywords": [
+    "openui5",
+    "sapui5",
+    "ui5",
+    "error",
+    "collector",
+    "exception",
+    "log",
+    "event"
+  ],
   "main": "dist/ui5ErrorCollector.min.js",
   "files": [
     "dist"
@@ -11,10 +21,10 @@
   "devDependencies": {
     "@microsoft/eslint-formatter-sarif": "^2.1.5",
     "@openui5/ts-types": "^1.98.0",
-    "@types/node": "^16.11.24",
+    "@types/node": "^16.11.25",
     "eslint": "^8.9.0",
     "eslint-config-mlauffer-ui5": "^0.3.1",
-    "vite": "^2.8.1"
+    "vite": "^2.8.3"
   },
   "scripts": {
     "dev": "vite",

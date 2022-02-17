@@ -10,6 +10,10 @@ When you contribute code, you affirm that the contribution is your original work
 
 Please note that this project is released with a [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
 
+## Versioning
+
+This library follows [Semantic Versioning](http://semver.org).
+
 ## Code Reviews
 
 All submissions, including submissions by project members, require review. The project uses GitHub pull requests for this purpose. Consult [GitHub Help](https://help.github.com/articles/about-pull-requests/) for more information on using pull requests.

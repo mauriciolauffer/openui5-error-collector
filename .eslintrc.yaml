@@ -4,4 +4,4 @@ extends:
 globals:
   ReportingObserver: true
 rules:
-  "sonarjs/cognitive-complexity": ["error", 20]
+  "sonarjs/cognitive-complexity": ["error", 25]

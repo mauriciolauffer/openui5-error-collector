@@ -16,5 +16,11 @@ function(Controller) {
     const x1 = 1;
     x1 = 1;
   }, 500);
-  return Controller.extend('openui5.errorcollector.controller.App', /** @lends openui5.errorcollector.controller.BaseController.prototype */ {});
+  const App = Controller.extend('openui5.errorcollector.controller.App', /** @lends openui5.errorcollector.controller.BaseController.prototype */ {});
+
+  App.prototype.onAfterRendering = function() {
+    this.byId('captureErrors').setHtmlText('<pre><code>' + JSON.stringify(ui5ErrorCollector.getErrors()) + '</code></pre>');
+  };
+
+  return App;
 });

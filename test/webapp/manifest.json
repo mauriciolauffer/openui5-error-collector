@@ -44,7 +44,7 @@
 		"rootView": {
 			"viewName": "openui5.errorcollector.view.App",
 			"type": "XML",
-			"async": true,
+			"async": false,
 			"id": "app"
 		},
 		"dependencies": {
@@ -76,7 +76,7 @@
 			"config": {
 				"routerClass": "sap.m.routing.Router",
 				"viewType": "XML",
-				"async": true,
+				"async": false,
 				"viewPath": "openui5.errorcollector.view",
 				"controlId": "app",
 				"controlAggregation": "Pages",

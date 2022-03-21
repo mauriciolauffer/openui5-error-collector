@@ -3,23 +3,24 @@ on:
   push:
     branches: [master, main]
 
-# permissions: read-all
+permissions: read-all
 
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
       - uses: google-github-actions/release-please-action@v3
         with:
           release-type: node
           package-name: openui5-error-collector
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         if: ${{ steps.release.outputs.release_created }}
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
           cache: npm
-          registry-url: 'https://registry.npmjs.org'
         if: ${{ steps.release.outputs.release_created }}
       - run: npm ci --ignore-scripts
         if: ${{ steps.release.outputs.release_created }}

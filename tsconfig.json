@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "module": "none",
-    "target": "es2018",
+    "module": "None",
+    "target": "ES2018",
     "noEmit": true,
     "checkJs": true,
     "strict": true,
@@ -11,8 +11,7 @@
     "skipLibCheck": true,
     "outDir": "types",
     "types": [
-      "@openui5/ts-types",
-      "node"
+      "@openui5/ts-types"
     ]
   },
   "include": ["src/**/*"],

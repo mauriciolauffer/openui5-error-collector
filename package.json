@@ -19,12 +19,12 @@
     "dist"
   ],
   "devDependencies": {
-    "@microsoft/eslint-formatter-sarif": "^2.1.5",
-    "@openui5/ts-types": "^1.98.0",
-    "@types/node": "^16.11.25",
-    "eslint": "^8.9.0",
+    "@microsoft/eslint-formatter-sarif": "^2.1.7",
+    "@openui5/ts-types": "^1.99.0",
+    "eslint": "^8.11.0",
     "eslint-config-mlauffer-ui5": "^0.3.1",
-    "vite": "^2.8.3"
+    "gremlins.js": "^2.2.0",
+    "vite": "^2.8.6"
   },
   "scripts": {
     "dev": "vite",

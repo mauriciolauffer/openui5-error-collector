@@ -35,3 +35,4 @@ cp.project.properties.json
 .project
 .externalToolBuilders
 tmp/
+*.sarif

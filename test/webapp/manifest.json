@@ -44,7 +44,7 @@
 		"rootView": {
 			"viewName": "openui5.errorcollector.view.App",
 			"type": "XML",
-			"async": false,
+			"async": true,
 			"id": "app"
 		},
 		"dependencies": {
@@ -64,19 +64,13 @@
 				"settings": {
 					"bundleName": "openui5.errorcollector.i18n.i18n"
 				}
-			},
-			"app": {
-				"type": "sap.ui.model.json.JSONModel"
-			},
-			"device": {
-				"type": "sap.ui.model.json.JSONModel"
 			}
 		},
 		"routing": {
 			"config": {
 				"routerClass": "sap.m.routing.Router",
 				"viewType": "XML",
-				"async": false,
+				"async": true,
 				"viewPath": "openui5.errorcollector.view",
 				"controlId": "app",
 				"controlAggregation": "Pages",

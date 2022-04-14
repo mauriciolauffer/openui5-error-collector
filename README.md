@@ -61,8 +61,9 @@ To make it compatible with IE11, or to add any extra logic when synchronizing (t
  *
  * @param {string} serverUrl - Server URL
  * @param {UI5ErrorLogEvent[]} errors - List of captured errors, same as ui5ErrorCollector.getErrors() results
+ * @param {UI5ErrorLogEvent[]} logsToSync - List of captured errors since the last call
  */
-function myCustomOnSyncHook(serverUrl, errors) {
+function myCustomOnSyncHook(serverUrl, errors, logsToSync) {
   // Go crazy, do whatever you wanna here...
   const payload = JSON.stringify(errors);
   fetch(serverUrl, {body: payload, method: 'POST'});

@@ -40,6 +40,7 @@
    * @callback UI5ErroronSyncHookCallback
    * @param {string} serverUrl - Server URL
    * @param {UI5ErrorLogEvent[]} errors - List of captured errors
+   * @param {UI5ErrorLogEvent[]} logsToSync - List of captured errors since the last call
    */
 
   /**

@@ -169,11 +169,11 @@
     }
     const payload = JSON.stringify(logsToSync);
     if (CONFIG.onSyncHook) {
-      CONFIG.onSyncHook(CONFIG.serverUrl, logEvents);
+      CONFIG.onSyncHook(CONFIG.serverUrl, logEvents, logsToSync);
     } else {
       navigator.sendBeacon(CONFIG.serverUrl, payload);
-      CONFIG.lastSync = Date.now();
     }
+    CONFIG.lastSync = Date.now();
   }
 
   /**

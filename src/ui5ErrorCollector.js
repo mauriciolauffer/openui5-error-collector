@@ -118,11 +118,14 @@
    * @returns {UI5ErrorLogEvent} Mapped error, type = 'unhandledrejection'
    */
   function mapPromiseLogEntry(evt) {
+    console.log(typeof evt.reason);
+    console.dir(evt.reason);
     return Object.assign({}, LOG_TEMPLATE, {
       type: evt.type,
       timestamp: new Date().toJSON(),
       uri: window.location.href,
-      message: evt.reason,
+      stack: typeof evt.reason === 'object' ? evt.reason.stack : null,
+      message: typeof evt.reason === 'object' ? evt.reason.message : evt.reason,
       elapsedTimestamp: evt.timeStamp,
       level: 1
     });

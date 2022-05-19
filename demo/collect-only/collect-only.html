@@ -5,12 +5,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="author" content="Mauricio Lauffer">
-  <title>openui5.errorcollector</title>
+  <title>ErrorCollector - local</title>
 </head>
 
 <body>
   <pre><code id="captureErrors"></code></pre>
-  <script src="../src/ui5ErrorCollector.js"></script>
+  <script src="../../dist/ui5ErrorCollector.min.js"></script>
   <script id="sap-ui-bootstrap" src="https://openui5.hana.ondemand.com/resources/sap-ui-core.js"
     data-sap-ui-theme="sap_fiori_3" data-sap-ui-async="true" data-sap-ui-onInit="ui5Boot"></script>
 
@@ -30,11 +30,6 @@
         }, 500);
       });
     }
-
-    fetch('./notFoundNoCatch.js')
-      .then(() => {
-        throw 'no Promise catch - text...';
-      });
 
     fetch('./notFoundNoCatch.js')
       .then(() => {

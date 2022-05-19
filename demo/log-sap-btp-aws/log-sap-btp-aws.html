@@ -5,12 +5,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="author" content="Mauricio Lauffer">
-  <title>openui5.errorcollector</title>
+  <title>ErrorCollector - local send</title>
 </head>
 
 <body>
   <pre><code id="captureErrors"></code></pre>
-  <script src="../src/ui5ErrorCollector.js"></script>
+  <script src="../../dist/ui5ErrorCollector.min.js"></script>
   <script id="sap-ui-bootstrap" src="https://openui5.hana.ondemand.com/resources/sap-ui-core.js"
     data-sap-ui-theme="sap_fiori_3" data-sap-ui-async="true" data-sap-ui-onInit="ui5Boot"></script>
 
@@ -33,12 +33,7 @@
 
     fetch('./notFoundNoCatch.js')
       .then(() => {
-        throw 'no Promise catch - text...';
-      });
-
-    fetch('./notFoundNoCatch.js')
-      .then(() => {
-        throw new Error('no Promise catch - error object...');
+        throw new Error('no Promise catch...');
       });
 
     function error1() {
@@ -58,6 +53,11 @@
     setTimeout(error1, 1);
     setTimeout(error2, 2);
     setTimeout(error3, 3);
+
+    // Set server URL to logging system
+    ui5ErrorCollector.setConfiguration({
+      serverUrl: 'http://127.0.0.1:3000/'
+    });
   </script>
 </body>
 

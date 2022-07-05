@@ -1,70 +1,70 @@
 {
-	"_version": "1.36.0",
+  "_version": "1.36.0",
   "start_url": "index.html",
-	"sap.app": {
-		"id": "openui5.errorcollector",
-		"type": "application",
-		"i18n": "i18n/i18n.properties",
-		"applicationVersion": {
-			"version": "${version}"
-		},
-		"title": "{{appTitle}}",
-		"description": "{{appDescription}}",
-		"dataSources": {
-			"mainService": {
-				"uri": "https://services.odata.org/V2/Northwind/Northwind.svc",
-				"type": "OData",
-				"settings": {
-					"odataVersion": "2.0"
-				}
-			},
-			"logService": {
-				"uri": "https://my-sap-gateway-server.com/sap/opu/odata/sap/LoggingService",
-				"type": "OData",
-				"settings": {
-					"odataVersion": "2.0"
-				}
-			}
-		}
-	},
-	"sap.ui": {
-		"technology": "UI5",
-		"icons": {
-			"icon": "",
-			"favIcon": "",
-			"phone": "",
-			"phone@2": "",
-			"tablet": "",
-			"tablet@2": ""
-		},
-		"deviceTypes": {
-			"desktop": true,
-			"tablet": true,
-			"phone": true
-		},
-		"fullWidth": true
-	},
-	"sap.ui5": {
-		"handleValidation": true,
-		"flexEnabled": false,
-		"rootView": {
-			"viewName": "openui5.errorcollector.view.App",
-			"type": "XML",
-			"async": false,
-			"id": "app"
-		},
-		"dependencies": {
-			"minUI5Version": "1.96.0",
-			"libs": {
-				"sap.m": {},
-				"sap.ui.core": {}
-			}
-		},
-		"contentDensities": {
-			"compact": true,
-			"cozy": true
-		},
-		"models": {
+  "sap.app": {
+    "id": "openui5.errorcollector",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "${version}"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "dataSources": {
+      "mainService": {
+        "uri": "https://services.odata.org/V2/Northwind/Northwind.svc",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "2.0"
+        }
+      },
+      "logService": {
+        "uri": "https://my-sap-gateway-server.com/sap/opu/odata/sap/LoggingService",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "2.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    },
+    "fullWidth": true
+  },
+  "sap.ui5": {
+    "handleValidation": true,
+    "flexEnabled": false,
+    "rootView": {
+      "viewName": "openui5.errorcollector.view.App",
+      "type": "XML",
+      "async": false,
+      "id": "app"
+    },
+    "dependencies": {
+      "minUI5Version": "1.96.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
       "": {
         "dataSource": "mainService",
         "preload": true
@@ -73,31 +73,31 @@
         "dataSource": "logService",
         "preload": true
       },
-			"i18n": {
-				"type": "sap.ui.model.resource.ResourceModel",
-				"settings": {
-					"bundleName": "openui5.errorcollector.i18n.i18n"
-				}
-			},
-			"app": {
-				"type": "sap.ui.model.json.JSONModel"
-			},
-			"device": {
-				"type": "sap.ui.model.json.JSONModel"
-			}
-		},
-		"routing": {
-			"config": {
-				"routerClass": "sap.m.routing.Router",
-				"viewType": "XML",
-				"async": false,
-				"viewPath": "openui5.errorcollector.view",
-				"controlId": "app",
-				"controlAggregation": "Pages",
-				"clearControlAggregation": true
-			},
-			"routes": [],
-			"targets": {}
-		}
-	}
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "openui5.errorcollector.i18n.i18n"
+        }
+      },
+      "app": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "device": {
+        "type": "sap.ui.model.json.JSONModel"
+      }
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "async": false,
+        "viewPath": "openui5.errorcollector.view",
+        "controlId": "app",
+        "controlAggregation": "Pages",
+        "clearControlAggregation": true
+      },
+      "routes": [],
+      "targets": {}
+    }
+  }
 }

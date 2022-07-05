@@ -19,20 +19,20 @@
     "dist"
   ],
   "devDependencies": {
-    "@microsoft/eslint-formatter-sarif": "^2.1.7",
-    "@openui5/ts-types": "^1.100.0",
-    "@types/node": "^16.11.27",
-    "eslint": "^8.13.0",
-    "eslint-config-mlauffer-ui5": "^0.3.1",
-    "vite": "^2.9.4"
+    "@microsoft/eslint-formatter-sarif": "^3.0.0",
+    "@types/node": "^16.11.43",
+    "@types/openui5": "^1.103.0",
+    "eslint": "^8.19.0",
+    "eslint-config-mlauffer-ui5": "^0.3.2",
+    "vite": "^2.9.13"
   },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "test": "npm run lint",
-    "lint": "eslint src",
-    "lint:fix": "eslint src --fix",
+    "lint": "eslint src demo",
+    "lint:fix": "eslint src demo --fix",
     "lint:ci": "eslint src -f @microsoft/eslint-formatter-sarif -o target/eslint.sarif"
   },
   "repository": {

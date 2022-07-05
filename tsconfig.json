@@ -11,7 +11,7 @@
     "skipLibCheck": true,
     "outDir": "types",
     "types": [
-      "@openui5/ts-types",
+      "openui5",
       "node"
     ]
   },

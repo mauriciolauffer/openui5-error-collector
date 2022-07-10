@@ -24,7 +24,7 @@
     "@types/node": "^16.11.43",
     "eslint": "^8.19.0",
     "eslint-config-mlauffer-ui5": "^0.3.2",
-    "vite": "^2.9.13"
+    "vite": "^2.9.14"
   },
   "scripts": {
     "dev": "vite",

@@ -208,7 +208,7 @@
   function setReportingObserver() {
     if (window.ReportingObserver) {
       const options = {
-        types: ['deprecation', 'intervation', 'crash'],
+        types: ['deprecation', 'intervention', 'crash'],
         buffered: true
       };
       const observer = new ReportingObserver(function(reports) {

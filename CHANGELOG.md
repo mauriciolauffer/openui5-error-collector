@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1](https://github.com/mauriciolauffer/openui5-error-collector/compare/v1.0.0...v1.0.1) (2022-07-10)
+
+
+### Bug Fixes
+
+* Intervention typo ([bf7a676](https://github.com/mauriciolauffer/openui5-error-collector/commit/bf7a676a6f557bc5bc8a336f2d5b1634cce53d48))
+* Intervention typo ([263917e](https://github.com/mauriciolauffer/openui5-error-collector/commit/263917e3779daf2a5cf168d7282adcf9d4364463))
+
 ## 1.0.0 (2022-02-17)
 
 

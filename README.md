@@ -4,8 +4,8 @@
 
 This library collects javascript errors and can send them to a backend, if errors need to be logged and saved for further analysis:
 
-* vanilla js errors (reference, syntax, type, etc)
-* Promises with unhandled rejections
+* vanilla [js errors](https://developer.mozilla.org/en-US/docs/Web/API/Window/error_event) (reference, syntax, type, etc)
+* Promises with [unhandled rejections](https://developer.mozilla.org/en-US/docs/Web/API/Window/unhandledrejection_event)
 * UI5 log events from [sap/base/Log](https://openui5.hana.ondemand.com/index.html#/api/module:sap/base/Log)
 * errors from [Report API](https://developer.mozilla.org/en-US/docs/Web/API/Reporting_API)
 

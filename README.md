@@ -41,7 +41,7 @@ Import openui5-error-collector to your UI5 application as a regular javascript f
 <script async id="sap-ui-bootstrap" src="/resources/sap-ui-core.js" ... ></script>
 ```
 
-Once imported, all errros will be automatically captured. It also exposes a global variable `ui5ErrorCollector`, eg, `window.ui5ErrorCollector` which can be used to get the errors and to set the details to send them to a backend server.
+Once imported, all errors will be automatically captured. It also exposes a global variable `ui5ErrorCollector`, eg, `window.ui5ErrorCollector` which can be used to get the errors and to set the details to send them to a backend server.
 
 #### Sending errors to a backend
 
@@ -53,7 +53,7 @@ ui5ErrorCollector.setConfiguration({
 });
 ```
 
-To make it compatible with IE11, or to add any extra logic when synchronizing (transform the payload, send to multiple backends, etc), a callback `onSyncHook` ca be passed to method `ui5ErrorCollector.setConfiguration`. This'll replace the default behaviour and use the provided callback `onSyncHook` rather than `navigator.sendBeacon`.
+To make it compatible with IE11, or to add any extra logic when synchronizing (transform the payload, send to multiple backends, etc), a callback `onSyncHook` can be passed to method `ui5ErrorCollector.setConfiguration`. This'll replace the default behaviour and use the provided callback `onSyncHook` rather than `navigator.sendBeacon`.
 
 ```js
 /**

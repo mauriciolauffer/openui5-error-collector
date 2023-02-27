@@ -14,17 +14,18 @@
     "log",
     "event"
   ],
+  "type": "module",
   "main": "dist/ui5ErrorCollector.min.js",
   "files": [
     "dist"
   ],
   "devDependencies": {
     "@microsoft/eslint-formatter-sarif": "^3.0.0",
-    "@openui5/ts-types": "^1.103.0",
-    "@types/node": "^16.11.43",
-    "eslint": "^8.19.0",
-    "eslint-config-mlauffer-ui5": "^0.3.2",
-    "vite": "^2.9.14"
+    "@openui5/ts-types": "^1.111.0",
+    "@types/node": "^18.14.2",
+    "eslint": "^8.35.0",
+    "eslint-config-mlauffer-ui5": "^0.3.3",
+    "vite": "^4.1.4"
   },
   "scripts": {
     "dev": "vite",

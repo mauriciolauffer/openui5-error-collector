@@ -35,3 +35,6 @@ cp.project.properties.json
 .project
 .externalToolBuilders
 tmp/
+/test-results/
+/playwright-report/
+/playwright/.cache/

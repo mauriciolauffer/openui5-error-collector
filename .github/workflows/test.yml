@@ -24,3 +24,5 @@ jobs:
       with:
         sarif_file: target/eslint.sarif
     - run: npm test
+    - run: npx playwright install --with-deps
+    - run: npx playwright test

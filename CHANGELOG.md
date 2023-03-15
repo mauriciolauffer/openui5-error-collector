@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/mauriciolauffer/openui5-error-collector/compare/v1.0.1...v1.1.0) (2023-03-15)
+
+
+### Features
+
+* Set last syncronization time ([637d147](https://github.com/mauriciolauffer/openui5-error-collector/commit/637d147ac019950e9f98c8ace35de6f96ddb2b3c))
+
 ## [1.0.1](https://github.com/mauriciolauffer/openui5-error-collector/compare/v1.0.0...v1.0.1) (2022-07-10)
 
 

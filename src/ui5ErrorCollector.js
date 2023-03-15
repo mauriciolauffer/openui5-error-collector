@@ -172,6 +172,7 @@
       CONFIG.onSyncHook(CONFIG.serverUrl, logEvents);
     } else {
       navigator.sendBeacon(CONFIG.serverUrl, payload);
+      setLastSync(Date.now());
       CONFIG.lastSync = Date.now();
     }
   }
@@ -189,6 +190,15 @@
     if (typeof params.onSyncHook === 'function') {
       CONFIG.onSyncHook = params.onSyncHook;
     }
+  }
+
+  /**
+   * Set last syncronization itme
+   *
+   * @param {number} timestamp - Last syncronization date time
+   */
+  function setLastSync(timestamp) {
+    CONFIG.lastSync = timestamp;
   }
 
   /**
@@ -257,9 +267,9 @@
   window.addEventListener('unhandledrejection', function logUnhandledRejection(evt) {
     logEvents.push(mapPromiseLogEntry(evt));
   });
-  window.addEventListener('beforeunload', function onBeforeUnload() {
+  /* window.addEventListener('beforeunload', function onBeforeUnload() {
     sendLogsToServer();
-  });
+  }); */
   document.addEventListener('visibilitychange', function onVisibilityChange() {
     if (document.visibilityState === 'hidden') {
       sendLogsToServer();
@@ -268,6 +278,7 @@
 
   window.ui5ErrorCollector = {
     getErrors: getErrors,
-    setConfiguration: setConfiguration
+    setConfiguration: setConfiguration,
+    setLastSync: setLastSync
   };
 }());

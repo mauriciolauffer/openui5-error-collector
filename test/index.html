@@ -42,6 +42,19 @@
       document.getElementById('captureErrors').textContent = JSON.stringify(window.ui5ErrorCollector.getErrors(), null, 4);
     }, 200);
   </script>
+  <script>
+     ui5ErrorCollector.setConfiguration({
+      serverUrl: '/api/errorCollector',
+      onSyncHook: async function myCustomOnSyncHook(serverUrl, errors) {
+        const payload = JSON.stringify(errors);
+        await fetch(serverUrl, {
+          body: payload,
+          method: 'POST'
+        });
+        ui5ErrorCollector.setLastSync(Date.now());
+      }
+    });
+  </script>
 </body>
 
 </html>
